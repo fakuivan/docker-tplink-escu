@@ -14,7 +14,7 @@ ARG XPRA_UID=1000
 # Taken from https://github.com/tyson-swetnam/docker-xpra/blob/7393a271023551e2a5eea15bd8830c22993dadd7/app/Dockerfile#L26-L29
 RUN adduser --disabled-password --gecos "VICE_User" --uid "$XPRA_UID" xpra_user && \
     mkdir -p /run/user/"$XPRA_UID"/xpra /run/xpra && \
-    chown xpra_user:xpra_user /run/user/"$XPRA_UID"/xpra /run/xpra
+    chown -R xpra_user:xpra_user /run/user/"$XPRA_UID"/ /run/xpra
 
 USER xpra_user
 
