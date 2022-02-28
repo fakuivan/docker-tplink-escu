@@ -42,7 +42,7 @@ version: '3.7'
 services:
   tplink_escu:
     command:
-    - "--bind-tcp=0.0.0.0:8080,auth=file:filename=password.txt"
+    - "--bind-tcp=0.0.0.0:8080,auth=file:filename=/home/xpra_user/password.txt"
     image: fakuivan/xpra-tplink-escu
     environment:
         PUID: 911
