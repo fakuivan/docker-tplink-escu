@@ -29,6 +29,10 @@ a JRE for aarch64 from Oracle that comes with JavaFX).
 
 ## Usage
 
+This image uses [s6-overlay](https://github.com/just-containers/s6-overlay), to allow running
+xpra with an arbitrary user and group id. This is acomplished by setting the environment variables
+`PUID` and `PGID`.
+
 Example using docker compose (more on the socat container below)
 
 ```yaml
@@ -40,6 +44,9 @@ services:
     command:
     - "--bind-tcp=0.0.0.0:8080,auth=file:filename=password.txt"
     image: fakuivan/xpra-tplink-escu
+    environment:
+        PUID: 911
+        PGID: 911
     networks:
       tplink_escu_net:
         aliases:
@@ -48,7 +55,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-    # utility.data should have uid of 1000, so does password.txt
+    # utility.data should have uid of `$PUID`, so does password.txt
     - source: /raid5/opt/tplink-escu/utility.data
       target: "/home/xpra_user/C:\\Users\\Public\\Documents\\TP-LINK\\utility.data"
       type: bind

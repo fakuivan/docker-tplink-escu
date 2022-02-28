@@ -6,18 +6,18 @@ RUN apt update \
  && echo "deb [arch=amd64] https://xpra.org/ focal main" > /etc/apt/sources.list.d/xpra.list \
  && wget -q https://xpra.org/gpg.asc -O- | apt-key add - \
  && apt update \
- && DEBIAN_FRONTEND=noninteractive apt install -y xpra \
- && mkdir -p /run/user/0/xpra
+ && DEBIAN_FRONTEND=noninteractive apt install -y xpra
 
-ARG XPRA_UID=1000
+ARG IMAGE_ARCH=x86_64
+ARG S6_OVERLAY_VERSION=3.0.0.2-2
+
+ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch-${S6_OVERLAY_VERSION}.tar.xz /tmp
+RUN tar -C / -Jxpf /tmp/s6-overlay-noarch-"${S6_OVERLAY_VERSION}".tar.xz
+ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-${IMAGE_ARCH}-${S6_OVERLAY_VERSION}.tar.xz /tmp
+RUN tar -C / -Jxpf /tmp/s6-overlay-"${IMAGE_ARCH}"-"${S6_OVERLAY_VERSION}".tar.xz
 
 # Taken from https://github.com/tyson-swetnam/docker-xpra/blob/7393a271023551e2a5eea15bd8830c22993dadd7/app/Dockerfile#L26-L29
-RUN adduser --disabled-password --gecos "VICE_User" --uid "$XPRA_UID" xpra_user && \
-    mkdir -p /run/user/"$XPRA_UID"/xpra /run/xpra && \
-    chown -R xpra_user:xpra_user /run/user/"$XPRA_UID"/ /run/xpra
+RUN adduser --disabled-password --gecos "VICE_User" xpra_user
+COPY rootfs/ /
 
-USER xpra_user
-
-WORKDIR /home/xpra_user
-
-ENTRYPOINT [ "xpra" ]
+ENTRYPOINT [ "/entrypoint.sh", "xpra" ]

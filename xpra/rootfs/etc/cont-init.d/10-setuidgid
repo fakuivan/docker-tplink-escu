@@ -1,0 +1,10 @@
+#!/command/with-contenv bash
+
+PUID="${PUID:-911}"
+PGID="${PGID:-911}"
+
+PATH="/usr/sbin:$PATH"
+
+groupmod -o -g "$PGID" xpra_user
+usermod -o -u "$PUID" xpra_user
+

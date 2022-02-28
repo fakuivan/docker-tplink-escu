@@ -1,0 +1,8 @@
+#!/command/with-contenv bash
+
+PUID="$(id -u xpra_user)"
+
+mkdir -p /run/user/"$PUID"/xpra /run/xpra
+chown -R xpra_user:xpra_user /run/user/"$PUID"/ /run/xpra
+chmod 700 /run/user/"$PUID"/xpra
+chmod 775 /run/xpra
