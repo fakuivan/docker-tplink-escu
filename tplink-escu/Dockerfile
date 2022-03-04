@@ -11,5 +11,6 @@ COPY ./escu.jar /escu.jar
 ENTRYPOINT [ "/entrypoint.sh", \
  "xpra", "start", ":80", \
  "--mdns=no", "--webcam=no", "--no-daemon", \
- "--start=java -jar /escu.jar"]
+ "--start-child=java -jar /escu.jar", \
+ "--exit-with-children" ]
 
